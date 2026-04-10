@@ -76,49 +76,106 @@ const ScoreGauge = ({ score, label, color = 'primary' }: { score: number, label:
 // --- Views ---
 
 const HomeView = ({ onNavigate }: { onNavigate: (view: string, id?: string) => void }) => (
-  <div className="space-y-10 pb-20">
-    <section className="relative h-[400px] flex flex-col justify-center items-center text-center px-6 overflow-hidden rounded-3xl">
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/20 to-bg-main z-0" />
-      <div className="relative z-10 max-w-2xl space-y-6">
-        <motion.h1 
+  <div className="space-y-16 pb-20">
+    {/* Hero Section Refactorisé */}
+    <section className="relative min-h-[500px] flex flex-col justify-center items-center text-center px-6 overflow-hidden rounded-[2.5rem] bg-[#0A0A0A] border border-white/5 shadow-2xl">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(124,58,237,0.1),transparent_70%)]" />
+      <div className="relative z-10 max-w-3xl space-y-8">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-6xl font-bold leading-tight"
+          className="space-y-4"
         >
-          Découvrez par où <span className="text-gradient">commencer.</span>
-        </motion.h1>
-        <p className="text-gray-400 text-lg">
-          L'application qui transforme les avis musicaux en jugements utiles, lisibles et actionnables.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Badge variant="premium">Nouveau : Analyse IA 2.0</Badge>
+          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight">
+            Sillage : Découvrez par où <span className="text-gradient">commencer</span> votre voyage musical.
+          </h1>
+          <p className="text-gray-400 text-xl max-w-2xl mx-auto font-light leading-relaxed">
+            L'application qui transforme les avis musicaux en jugements utiles, lisibles et actionnables pour ne plus jamais écouter au hasard.
+          </p>
+        </motion.div>
+
+        {/* Barre de Recherche Réelle */}
+        <div className="relative max-w-xl mx-auto group">
+          <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-gray-500 group-focus-within:text-brand-primary transition-colors">
+            <Search size={20} />
+          </div>
+          <input 
+            type="text" 
+            placeholder="Rechercher un artiste, un album ou un genre..."
+            className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary transition-all backdrop-blur-xl shadow-2xl"
+          />
+          <div className="absolute inset-y-2 right-2">
+            <button className="h-full px-6 premium-gradient rounded-xl font-bold text-sm shadow-lg hover:scale-105 active:scale-95 transition-all">
+              Rechercher
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <button 
             onClick={() => onNavigate('explore')}
-            className="px-8 py-3 premium-gradient rounded-full font-bold flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+            className="px-10 py-4 premium-gradient rounded-full font-bold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-primary/20"
           >
-            Explorer les artistes <ArrowRight size={18} />
+            Explorer les artistes <ArrowRight size={20} />
+          </button>
+          <button 
+            className="px-10 py-4 bg-white/5 border border-white/10 rounded-full font-bold hover:bg-white/10 active:scale-95 transition-all"
+          >
+            Comment ça marche ?
           </button>
         </div>
       </div>
     </section>
 
-    <section className="space-y-6">
+    {/* Section "Par où commencer" - Cartes Entièrement Cliquables */}
+    <section className="space-y-8">
       <div className="flex justify-between items-end">
-        <h2 className="text-2xl">Par où commencer</h2>
-        <button className="text-brand-primary text-sm font-bold flex items-center gap-1">Voir tout <ChevronRight size={16}/></button>
+        <div className="space-y-1">
+          <h2 className="text-3xl font-display font-bold">Par où commencer</h2>
+          <p className="text-gray-500 text-sm">Les meilleures portes d'entrée sélectionnées par nos experts.</p>
+        </div>
+        <button 
+          onClick={() => onNavigate('explore')}
+          className="text-brand-primary text-sm font-bold flex items-center gap-1 hover:underline group"
+        >
+          Voir tout le catalogue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {MOCK_ARTISTS.map(artist => (
-          <Card key={artist.id} onClick={() => onNavigate('artist', artist.id)} className="flex gap-4 items-center">
-            <img src={artist.cover_image_url} alt={artist.name} className="w-20 h-20 rounded-lg object-cover" referrerPolicy="no-referrer" />
-            <div className="flex-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {MOCK_ARTISTS.slice(0, 2).map(artist => (
+          <Card 
+            key={artist.id} 
+            onClick={() => onNavigate('artist', artist.id)} 
+            className="flex gap-6 items-center p-6 group relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative shrink-0">
+              <img src={artist.cover_image_url} alt={artist.name} className="w-28 h-28 rounded-2xl object-cover shadow-2xl group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
+              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-bg-surface border border-white/10 rounded-full flex items-center justify-center shadow-xl">
+                <Play fill="#7C3AED" size={16} className="ml-1" />
+              </div>
+            </div>
+            <div className="flex-1 relative z-10 space-y-2">
               <div className="flex justify-between items-start">
-                <h3 className="text-lg">{artist.name}</h3>
+                <h3 className="text-2xl font-bold group-hover:text-brand-primary transition-colors">{artist.name}</h3>
                 <Badge variant="premium">Guide IA</Badge>
               </div>
-              <p className="text-sm text-gray-400 line-clamp-1 mt-1">{artist.entry_level_advice}</p>
-              <div className="flex gap-4 mt-2">
-                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Consensus: {artist.consensus_score}%</div>
-                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Avis: {artist.review_count}</div>
+              <p className="text-sm text-gray-400 leading-relaxed line-clamp-2 italic">"{artist.entry_level_advice}"</p>
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-gray-600 uppercase font-bold tracking-widest">Consensus</span>
+                    <span className="text-sm font-bold text-brand-primary">{artist.consensus_score}%</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-gray-600 uppercase font-bold tracking-widest">Avis</span>
+                    <span className="text-sm font-bold">{artist.review_count}</span>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-brand-secondary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0">
+                  Voir le guide <ArrowRight size={14} />
+                </span>
               </div>
             </div>
           </Card>
@@ -126,12 +183,58 @@ const HomeView = ({ onNavigate }: { onNavigate: (view: string, id?: string) => v
       </div>
     </section>
 
-    <section className="space-y-6">
-      <h2 className="text-2xl">Tendances par genre</h2>
-      <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
-        {['Pop', 'Rock', 'Indie', 'Hip-hop', 'Cloud Rap', 'Electro'].map(genre => (
-          <button key={genre} className="px-6 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-colors whitespace-nowrap text-sm font-medium">
-            {genre}
+    {/* NOUVELLE SECTION : Avis les plus utiles */}
+    <section className="space-y-8">
+      <div className="flex justify-between items-end">
+        <div className="space-y-1">
+          <h2 className="text-3xl font-display font-bold">Avis les plus utiles</h2>
+          <p className="text-gray-500 text-sm">La preuve par l'analyse : des critiques structurées et objectives.</p>
+        </div>
+        <button 
+          onClick={() => onNavigate('community')}
+          className="text-brand-secondary text-sm font-bold flex items-center gap-1 hover:underline group"
+        >
+          Explorer la communauté <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {MOCK_REVIEWS.slice(0, 2).map(review => (
+          <ReviewCard key={review.id} review={review} />
+        ))}
+      </div>
+    </section>
+
+    {/* Section Tendances par Genre - MVP Strict */}
+    <section className="space-y-8">
+      <div className="space-y-1">
+        <h2 className="text-3xl font-display font-bold">Tendances par genre</h2>
+        <p className="text-gray-500 text-sm">Focus sur les piliers de la culture musicale actuelle.</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { name: 'Pop', icon: Sparkles, color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
+          { name: 'Rock / Indie Rock', icon: Music, color: 'text-brand-secondary', bg: 'bg-brand-secondary/10' },
+          { name: 'Hip-hop / Rap', icon: Disc, color: 'text-orange-400', bg: 'bg-orange-400/10' }
+        ].map(genre => (
+          <button 
+            key={genre.name} 
+            className={`group p-8 rounded-[2rem] border border-white/5 bg-white/5 hover:bg-white/10 transition-all text-left space-y-4 hover:-translate-y-1 active:scale-95`}
+          >
+            <div className={`w-12 h-12 ${genre.bg} ${genre.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+              <genre.icon size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold">{genre.name}</h3>
+              <p className="text-xs text-gray-500 mt-1">Explorer les guides {genre.name.toLowerCase()}</p>
+            </div>
+            <div className="flex justify-between items-center pt-4">
+              <div className="flex -space-x-2">
+                <div className="w-6 h-6 rounded-full bg-white/10 border border-bg-main" />
+                <div className="w-6 h-6 rounded-full bg-white/10 border border-bg-main" />
+                <div className="w-6 h-6 rounded-full bg-white/10 border border-bg-main" />
+              </div>
+              <ArrowRight size={18} className="text-gray-700 group-hover:text-white transition-colors" />
+            </div>
           </button>
         ))}
       </div>
@@ -414,78 +517,84 @@ const TrackView = ({ trackId, onNavigate }: { trackId: string, onNavigate: (view
     </div>
   );
 };
-const ReviewCard = ({ review }: { review: Review }) => (
-  <Card className="space-y-6 p-8 relative overflow-hidden group">
-    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-brand-primary/10 transition-colors" />
-    
-    <div className="flex justify-between items-start relative z-10">
-      <div className="flex items-center gap-4">
-        <img src={MOCK_USERS[0].avatar_url} className="w-12 h-12 rounded-full border-2 border-brand-primary/20" referrerPolicy="no-referrer" />
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-lg">{MOCK_USERS[0].display_name}</span>
-            <Badge variant="success">Qualifié</Badge>
-          </div>
-          <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">
-            Auditeur de longue date • Crédibilité: {MOCK_USERS[0].credibility_level}%
+const ReviewCard = ({ review }: { review: Review, key?: string | number }) => {
+  const user = MOCK_USERS.find(u => u.id === review.user_id) || MOCK_USERS[0];
+  
+  return (
+    <Card className="space-y-6 p-8 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-brand-primary/10 transition-colors" />
+      
+      <div className="flex justify-between items-start relative z-10">
+        <div className="flex items-center gap-4">
+          <img src={user.avatar_url} className="w-12 h-12 rounded-full border-2 border-brand-primary/20" referrerPolicy="no-referrer" />
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-lg">{user.display_name}</span>
+              <Badge variant={user.status === 'qualifie' ? 'success' : 'default'}>
+                {user.status === 'qualifie' ? 'Qualifié' : 'Confirmé'}
+              </Badge>
+            </div>
+            <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">
+              {user.bio_short.split('.')[0]} • Crédibilité: {user.credibility_level}%
+            </div>
           </div>
         </div>
+        <div className="flex flex-col items-end">
+          <div className="text-3xl font-display font-bold text-brand-primary">{review.rating_overall}/10</div>
+          <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Note globale</div>
+        </div>
       </div>
-      <div className="flex flex-col items-end">
-        <div className="text-3xl font-display font-bold text-brand-primary">{review.rating_overall}/10</div>
-        <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Note globale</div>
-      </div>
-    </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[10px] text-brand-primary uppercase font-bold tracking-widest">
-            <Music size={12} /> Ce que j'entends
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-[10px] text-brand-primary uppercase font-bold tracking-widest">
+              <Music size={12} /> Ce que j'entends
+            </div>
+            <p className="text-gray-300 leading-relaxed text-sm italic">"{review.what_i_hear}"</p>
           </div>
-          <p className="text-gray-300 leading-relaxed text-sm italic">"{review.what_i_hear}"</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-[10px] text-brand-secondary uppercase font-bold tracking-widest">
+              <Sparkles size={12} /> Ce que ça me fait
+            </div>
+            <p className="text-gray-300 leading-relaxed text-sm">"{review.what_it_makes_me_feel}"</p>
+          </div>
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[10px] text-brand-secondary uppercase font-bold tracking-widest">
-            <Sparkles size={12} /> Ce que ça me fait
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-[10px] text-green-400 uppercase font-bold tracking-widest">
+              <ThumbsUp size={12} /> Pourquoi ça fonctionne
+            </div>
+            <p className="text-gray-300 leading-relaxed text-sm">{review.why_it_works}</p>
           </div>
-          <p className="text-gray-300 leading-relaxed text-sm">"{review.what_it_makes_me_feel}"</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-[10px] text-orange-400 uppercase font-bold tracking-widest">
+              <AlertCircle size={12} /> La limite ou réserve
+            </div>
+            <p className="text-gray-300 leading-relaxed text-sm">{review.limit_or_reserve}</p>
+          </div>
         </div>
       </div>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[10px] text-green-400 uppercase font-bold tracking-widest">
-            <ThumbsUp size={12} /> Pourquoi ça fonctionne
-          </div>
-          <p className="text-gray-300 leading-relaxed text-sm">{review.why_it_works}</p>
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-[10px] text-orange-400 uppercase font-bold tracking-widest">
-            <AlertCircle size={12} /> La limite ou réserve
-          </div>
-          <p className="text-gray-300 leading-relaxed text-sm">{review.limit_or_reserve}</p>
-        </div>
-      </div>
-    </div>
 
-    <div className="pt-6 border-t border-white/5 flex justify-between items-center relative z-10">
-      <div className="flex gap-4">
-        <button className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-brand-primary transition-colors">
-          <ThumbsUp size={14} /> Utile ({review.helpful_count})
-        </button>
-        <button className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-white transition-colors">
-          <MessageSquare size={14} /> Commenter
-        </button>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] text-gray-600 uppercase font-bold">Score Qualité</span>
-        <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
-          <div className="h-full bg-green-500" style={{ width: `${review.quality_score}%` }} />
+      <div className="pt-6 border-t border-white/5 flex justify-between items-center relative z-10">
+        <div className="flex gap-4">
+          <button className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-brand-primary transition-colors">
+            <ThumbsUp size={14} /> Utile ({review.helpful_count})
+          </button>
+          <button className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-white transition-colors">
+            <MessageSquare size={14} /> Commenter
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-gray-600 uppercase font-bold">Score Qualité</span>
+          <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
+            <div className="h-full bg-green-500" style={{ width: `${review.quality_score}%` }} />
+          </div>
         </div>
       </div>
-    </div>
-  </Card>
-);
+    </Card>
+  );
+};
 
 const AlbumView = ({ albumId, onNavigate }: { albumId: string, onNavigate: (view: string, id?: string) => void }) => {
   const album = MOCK_ALBUMS.find(al => al.id === albumId);
@@ -750,6 +859,64 @@ export default function App() {
   const renderContent = () => {
     switch (currentView) {
       case 'home': return <HomeView onNavigate={navigate} />;
+      case 'explore': return (
+        <div className="space-y-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="space-y-1">
+              <h1 className="text-4xl font-bold">Explorer le catalogue</h1>
+              <p className="text-gray-500">Trouvez votre prochaine obsession musicale parmi nos guides certifiés.</p>
+            </div>
+            <div className="flex gap-3">
+              <button className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors">
+                <Filter size={20} />
+              </button>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Artiste, album..." 
+                  className="bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:border-brand-primary transition-colors w-64"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {MOCK_ARTISTS.map(artist => (
+              <Card key={artist.id} onClick={() => navigate('artist', artist.id)} className="group p-0 overflow-hidden flex flex-col">
+                <div className="relative h-48 overflow-hidden">
+                  <img src={artist.hero_image_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg-main to-transparent" />
+                  <div className="absolute bottom-4 left-4">
+                    <div className="flex gap-1 mb-2">
+                      {artist.genres.slice(0, 2).map(g => <Badge key={g}>{g}</Badge>)}
+                    </div>
+                    <h3 className="text-2xl font-bold">{artist.name}</h3>
+                  </div>
+                </div>
+                <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                  <p className="text-sm text-gray-400 line-clamp-2 italic">"{artist.entry_level_advice}"</p>
+                  <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                    <div className="flex gap-4">
+                      <div className="text-center">
+                        <div className="text-xs font-bold text-brand-primary">{artist.consensus_score}%</div>
+                        <div className="text-[8px] text-gray-600 uppercase font-bold">Consensus</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs font-bold">{artist.review_count}</div>
+                        <div className="text-[8px] text-gray-600 uppercase font-bold">Avis</div>
+                      </div>
+                    </div>
+                    <button className="p-2 bg-brand-primary/10 text-brand-primary rounded-lg group-hover:bg-brand-primary group-hover:text-white transition-all">
+                      <ArrowRight size={18} />
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      );
       case 'artist': return <ArtistView artistId={viewParams || 'a1'} onNavigate={navigate} />;
       case 'album': return <AlbumView albumId={viewParams || 'al1'} onNavigate={navigate} />;
       case 'track': return <TrackView trackId={viewParams || 't1'} onNavigate={navigate} />;
@@ -851,18 +1018,34 @@ export default function App() {
         </div>
 
         {!isPremium && (
-          <div className="mt-auto p-4 rounded-2xl bg-gradient-to-br from-brand-primary/20 to-brand-secondary/20 border border-white/10">
-            <div className="flex items-center gap-2 text-brand-primary mb-2">
-              <Lock size={16} />
-              <span className="text-xs font-bold uppercase tracking-widest">Premium</span>
+          <div className="mt-auto p-5 rounded-[2rem] bg-gradient-to-br from-brand-primary/20 via-brand-secondary/10 to-bg-surface border border-white/10 relative overflow-hidden group">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-primary/20 blur-3xl group-hover:bg-brand-primary/30 transition-colors" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 text-brand-primary mb-3">
+                <Sparkles size={18} />
+                <span className="text-xs font-bold uppercase tracking-widest">Sillage Premium</span>
+              </div>
+              <ul className="space-y-2 mb-6">
+                {[
+                  'Avis complets illimités',
+                  'Filtres d\'analyse avancés',
+                  'Profils d\'écoute similaires',
+                  'Zéro publicité',
+                  'Parcours enrichis'
+                ].map(feature => (
+                  <li key={feature} className="flex items-center gap-2 text-[10px] text-gray-300">
+                    <ShieldCheck size={12} className="text-brand-primary" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <button 
+                onClick={() => setIsPremium(true)}
+                className="w-full py-3 premium-gradient rounded-xl text-xs font-bold shadow-lg shadow-brand-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                Passer au payant
+              </button>
             </div>
-            <p className="text-xs text-gray-300 mb-4">Accédez aux avis complets et aux filtres avancés.</p>
-            <button 
-              onClick={() => setIsPremium(true)}
-              className="w-full py-2 premium-gradient rounded-lg text-xs font-bold shadow-lg shadow-brand-primary/20"
-            >
-              Passer au payant
-            </button>
           </div>
         )}
       </nav>

@@ -129,5 +129,20 @@ export const MOCK_REVIEWS: Review[] = [
     quality_score: 92,
     helpful_count: 45,
     created_at: '2025-12-01T10:00:00Z'
+  },
+  {
+    id: 'r2',
+    user_id: 'u2',
+    target_type: 'album',
+    target_id: 'al2',
+    rating_overall: 8,
+    what_i_hear: 'Des nappes vaporeuses, un autotune maîtrisé comme un instrument à part entière et des basses profondes.',
+    what_it_makes_me_feel: 'Une mélancolie urbaine, une sensation de planer au-dessus de la ville la nuit.',
+    why_it_works: 'L\'immersion totale dans un univers sonore cohérent et novateur.',
+    who_its_for: 'Les amateurs de rap atmosphérique et d\'expérimentations sonores.',
+    limit_or_reserve: 'Certains morceaux sont un peu longs, mais l\'ambiance reste intacte.',
+    quality_score: 88,
+    helpful_count: 32,
+    created_at: '2026-01-15T14:30:00Z'
   }
 ];
