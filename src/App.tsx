@@ -87,8 +87,8 @@ const HomeView = ({ onNavigate }: { onNavigate: (view: string, id?: string) => v
           className="space-y-4"
         >
           <Badge variant="premium">Nouveau : Analyse IA 2.0</Badge>
-          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight">
-            Sillage : Découvrez par où <span className="text-gradient">commencer</span> votre voyage musical.
+          <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tight text-white">
+            Sillage : Découvrez par où <span className="text-brand-primary bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">commencer</span> votre voyage musical.
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl mx-auto font-light leading-relaxed">
             L'application qui transforme les avis musicaux en jugements utiles, lisibles et actionnables pour ne plus jamais écouter au hasard.
